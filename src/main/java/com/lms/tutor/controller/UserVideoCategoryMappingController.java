@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,8 +56,18 @@ public class UserVideoCategoryMappingController {
 	@PutMapping("/")
 	public String updateUserVideoCategoryMapping(@RequestBody UserVideoCategoryMapping
 			userVideoCategoryMapping) {
+		userVideoCategoryMapping.setChildVideoCategory(childVideoCategoryRepository.findByChildCategoryId(userVideoCategoryMapping.
+				getChildVideoCategory().getChildCategoryId()));
+		userVideoCategoryMapping.setUser(userRepository.
+				findByUserId(userVideoCategoryMapping.getUser().getUserId()).get());
 		 userVideoCategoryMappingRepository.save(userVideoCategoryMapping);
 		 return "Success";
+	}
+	
+	@DeleteMapping("/{userVideoCatMapping}")
+	public String deleteUserCatMapping(@PathVariable int userVideoCatMapping) {
+		userVideoCategoryMappingRepository.deleteById(userVideoCatMapping);
+		return "Success";
 	}
 
 }
