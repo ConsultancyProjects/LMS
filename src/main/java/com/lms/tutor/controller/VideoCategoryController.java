@@ -3,6 +3,7 @@ package com.lms.tutor.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import com.lms.tutor.repository.VideoCategoryRepository;
 
 @RestController
 @RequestMapping("/video-categories")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class VideoCategoryController {
 	
 	@Autowired
@@ -26,13 +28,13 @@ public class VideoCategoryController {
 	}
 	
 	@PostMapping("/")
-	public String addTimeTable(@RequestBody VideoCategory videoCategory) {
+	public String addParentVideoCategory(@RequestBody VideoCategory videoCategory) {
 		videoCategoryRepository.save(videoCategory);
 		return "Success";
 	}
 	
 	@PutMapping("/")
-	public String updateTimeTable(@RequestBody VideoCategory videoCategory) {
+	public String updateParentVideoCategory(@RequestBody VideoCategory videoCategory) {
 		videoCategoryRepository.save(videoCategory);
 		return "Success";
 	}

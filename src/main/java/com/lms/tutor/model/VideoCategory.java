@@ -22,7 +22,7 @@ public class VideoCategory implements Serializable {
     
     @Column(name = "CATEGORY_NAME")
     private String categoryName;
-
+    
 	public int getCategoryId() {
 		return categoryId;
 	}
@@ -38,7 +38,6 @@ public class VideoCategory implements Serializable {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-    
-    
 
+    
 }

@@ -32,8 +32,13 @@ public class VideoController {
 	} 
 	
 	@GetMapping("/all/metadata/{categoryId}")
-	public List<Video> getAllVideosMetaDataCategoryCategoryId(@PathVariable(value = "categoryId") Integer categoryId) {
-		return videoRepository.findAllByCategoryCategoryId(categoryId);
+	public List<Video> findAllVideosThatBelongToParentCategory(@PathVariable(value = "categoryId") Integer categoryId) {
+		return videoRepository.findAllVideosThatBelongToParentCategory(categoryId);
+	}
+	
+	@GetMapping("/metadata/{categoryId}")
+	public Video getVideosMetaThatBelongToChildCategoryId(@PathVariable(value = "categoryId") Integer categoryId) {
+		return videoRepository.findByCategoryChildCategoryId(categoryId);
 	}
 	
 	@PostMapping("/metadata")

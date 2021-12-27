@@ -25,7 +25,7 @@ public class Video implements Serializable {
 	
 	@OneToOne
 	@JoinColumn(name = "CATEGORY_ID")
-	private VideoCategory category;
+	private ChildVideoCategory category;
 	
 	@Column(name = "VIDEO_NAME")
 	private String videoName;
@@ -44,11 +44,11 @@ public class Video implements Serializable {
 		this.videoId = videoId;
 	}
 
-	public VideoCategory getCategory() {
+	public ChildVideoCategory getCategory() {
 		return category;
 	}
 
-	public void setCategoryId(VideoCategory category) {
+	public void setCategoryId(ChildVideoCategory category) {
 		this.category = category;
 	}
 
@@ -76,7 +76,7 @@ public class Video implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public void setCategory(VideoCategory category) {
+	public void setCategory(ChildVideoCategory category) {
 		this.category = category;
 	}
 
