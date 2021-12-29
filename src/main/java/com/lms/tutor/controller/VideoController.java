@@ -1,6 +1,7 @@
 package com.lms.tutor.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.tutor.model.Video;
 import com.lms.tutor.repository.VideoRepository;
+import com.lms.tutor.util.S3Util;
 
 @RestController
 @RequestMapping("/videos")
@@ -21,24 +23,41 @@ public class VideoController {
 	@Autowired
 	VideoRepository videoRepository;
 	
+	@Autowired
+	S3Util s3Util;
+	
 	@GetMapping("/{videoId}/metadata/")
 	public Video getVideoMetaData(@PathVariable(value = "videoId") int videoId) {
-		return videoRepository.findById(videoId).get();
+		Optional<Video> video = videoRepository.findById(videoId);
+		video.ifPresent(v->v.setS3Path(s3Util.generatePresignedUrl(v.getS3Path())));
+		return video.get();
 	}
 	
 	@GetMapping("/all/metadata/")
 	public List<Video> getAllVideosMetaData() {
-		return videoRepository.findAll();
+		List<Video> videoData = videoRepository.findAll();
+		videoData.forEach(video->{
+			video.setS3Path(s3Util.generatePresignedUrl(video.getS3Path()));
+		});
+		return videoData;
 	} 
 	
 	@GetMapping("/all/metadata/{categoryId}")
 	public List<Video> findAllVideosThatBelongToParentCategory(@PathVariable(value = "categoryId") Integer categoryId) {
-		return videoRepository.findAllVideosThatBelongToParentCategory(categoryId);
+		List<Video> videoData = videoRepository.findAllVideosThatBelongToParentCategory(categoryId);
+		videoData.forEach(video->{
+			video.setS3Path(s3Util.generatePresignedUrl(video.getS3Path()));
+		});
+		return videoData;
 	}
 	
 	@GetMapping("/metadata/{categoryId}")
 	public Video getVideosMetaThatBelongToChildCategoryId(@PathVariable(value = "categoryId") Integer categoryId) {
-		return videoRepository.findByCategoryChildCategoryId(categoryId);
+		Video video = videoRepository.findByCategoryChildCategoryId(categoryId);
+		if (null != video) {
+			video.setS3Path(s3Util.generatePresignedUrl(video.getS3Path()));
+		}
+		return video;
 	}
 	
 	@PostMapping("/metadata")
