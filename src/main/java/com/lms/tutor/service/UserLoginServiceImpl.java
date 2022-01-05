@@ -32,7 +32,7 @@ public class UserLoginServiceImpl implements UserDetailsService {
 
 	public void registerUser(User user) throws Exception {
 		if (userRepository.findByUserId(user.getUserId()).isPresent()) {
-			throw new Exception("UserId already exists");
+			throw new Exception("Username already exists");
 		}
 		// so that role cant be assigned
 		user.setRole(null);

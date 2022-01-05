@@ -54,6 +54,6 @@ class LoginController {
 	public String registerUser(@RequestBody User user) throws Exception {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		this.userDetailsService.registerUser(user);
-		return "Success";
+		return "{ \"status\": \"Success\" } ";
 	}
 }
