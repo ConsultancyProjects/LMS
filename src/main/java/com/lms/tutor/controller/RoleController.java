@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.tutor.model.Role;
+import com.lms.tutor.model.Status;
 import com.lms.tutor.service.RoleServiceImpl;
 
 @RestController
@@ -28,9 +29,9 @@ public class RoleController {
 	}
 	
 	@PutMapping("/{roleId}")
-	public String updateRole(@RequestParam String userName, @PathVariable int roleId) {
+	public Status updateRole(@RequestParam String userName, @PathVariable int roleId) {
 		roleServiceImpl.updateRoleOfUser(roleId, userName);
-		return "Success";
+		return new Status("Success");
 	}
 
 }

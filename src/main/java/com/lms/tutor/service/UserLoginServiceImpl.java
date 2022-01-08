@@ -25,9 +25,18 @@ public class UserLoginServiceImpl implements UserDetailsService {
 		user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + userName));
 		return user.map(MyUserDetails::new).get();
 	}
+	
+	public List<User> findAllUsers() {
+		return (List<User>) userRepository.findAll();
+	}
 
 	public Optional<User> findUserByUserId(String userName) {
 		return userRepository.findByUserId(userName);
+	}
+	
+	public void deleteUser(String userId) {
+		userRepository.deleteUserByUserId(userId);
+		userRepository.deleteUsersInVideoCategory(userId);
 	}
 
 	public void registerUser(User user) throws Exception {
@@ -54,5 +63,10 @@ public class UserLoginServiceImpl implements UserDetailsService {
 	public List<User> getAllUsersWithRoleId(int roleId) {
 		return userRepository.findAllByRoleId(roleId);
 	}
+
+	public List<User> filterUserByEmail(String emailId) {
+		return userRepository.findByEmailStartsWith(emailId);
+	}
+	
 
 }
