@@ -3,6 +3,8 @@ package com.lms.tutor.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,6 +36,7 @@ public class UserLoginServiceImpl implements UserDetailsService {
 		return userRepository.findByUserId(userName);
 	}
 	
+	@Transactional
 	public void deleteUser(String userId) {
 		userRepository.deleteUserByUserId(userId);
 		userRepository.deleteUsersInVideoCategory(userId);
@@ -41,7 +44,7 @@ public class UserLoginServiceImpl implements UserDetailsService {
 
 	public void registerUser(User user) throws Exception {
 		if (userRepository.findByUserId(user.getUserId()).isPresent()) {
-			throw new Exception("Username already exists");
+			throw new Exception("UserId already exists");
 		}
 		// so that role cant be assigned
 		user.setRole(null);
