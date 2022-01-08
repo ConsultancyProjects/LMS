@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.tutor.constants.Constants;
 import com.lms.tutor.model.MyUserDetails;
+import com.lms.tutor.model.Status;
 import com.lms.tutor.model.User;
 import com.lms.tutor.service.UserLoginServiceImpl;
 
@@ -40,6 +42,11 @@ public class UserController {
 		return userList;
 	}
 	
+	@GetMapping("/all")
+	public List<User> getAllUsers() {
+		return userDetailsService.findAllUsers();
+	}
+	
 	@GetMapping("/{userId}")
 	public User getUserProfile(@PathVariable String userId) {
 		MyUserDetails userDetails = (MyUserDetails)SecurityContextHolder.getContext().
@@ -54,5 +61,11 @@ public class UserController {
 		}
 		return userData.get();
 	}
-
+	
+	@DeleteMapping("/{userId}")
+	public Status deleteUser(@PathVariable String userId) {
+		userDetailsService.deleteUser(userId);
+		return new Status("Success");
+	}
+	
 }

@@ -1,5 +1,7 @@
 package com.lms.tutor.config;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.lms.tutor.constants.Constants;
 import com.lms.tutor.filter.JwtRequestFilter;
@@ -74,12 +79,30 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter  {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests()
+		http.cors().configurationSource(corsConfigBean()).and().csrf().disable().authorizeRequests()
 		.antMatchers("/video-categories/**").hasAuthority(Constants.ROLE_ADMIN)
 		.antMatchers(AUTH_WHITELIST).permitAll()
 		.anyRequest().authenticated().and().exceptionHandling().and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
+    
+	@Bean
+	public CorsConfigurationSource corsConfigBean() {
+		final CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("*"));
+		// setAllowCredentials(true) is important, otherwise:
+		// The value of the 'Access-Control-Allow-Origin' header in the response must
+		// not be the wildcard '*' when the request's credentials mode is 'include'.
+		configuration.setAllowCredentials(true);
+		// setAllowedHeaders is important! Without it, OPTIONS preflight request
+		// will fail with 403 Invalid CORS request
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 
 }

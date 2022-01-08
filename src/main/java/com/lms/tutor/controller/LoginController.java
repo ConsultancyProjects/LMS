@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.tutor.model.AuthenticationRequest;
 import com.lms.tutor.model.AuthenticationResponse;
+import com.lms.tutor.model.Status;
 import com.lms.tutor.model.User;
 import com.lms.tutor.service.UserLoginServiceImpl;
 import com.lms.tutor.util.JwtUtil;
@@ -51,9 +52,9 @@ class LoginController {
 	}
 
 	@PostMapping(value = "/register")
-	public String registerUser(@RequestBody User user) throws Exception {
+	public Status registerUser(@RequestBody User user) throws Exception {
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		this.userDetailsService.registerUser(user);
-		return "{ \"status\": \"Success\" } ";
+		return new Status("Success");
 	}
 }
