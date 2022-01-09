@@ -2,9 +2,14 @@ package com.lms.tutor.controller;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.tutor.model.Status;
 import com.lms.tutor.model.VideoCategory;
+import com.lms.tutor.repository.ChildVideoCategoryRepository;
 import com.lms.tutor.repository.VideoCategoryRepository;
 
 @RestController
@@ -23,15 +29,22 @@ public class VideoCategoryController {
 	@Autowired
 	private VideoCategoryRepository videoCategoryRepository;
 	
+	@Autowired
+	private ChildVideoCategoryRepository childVideoCategoryRepository;
+	
 	@GetMapping("/")
 	public List<VideoCategory> getAllVideoCategories() {
 		return videoCategoryRepository.findAll();
 	}
 	
 	@PostMapping("/")
-	public String addParentVideoCategory(@RequestBody VideoCategory videoCategory) {
+	public Status addParentVideoCategory(@RequestBody VideoCategory videoCategory) throws Exception {
+		List<VideoCategory> catList = videoCategoryRepository.findAll();
+		if (catList.contains(videoCategory)) {
+			throw new Exception("Category Already Present!");
+		}
 		videoCategoryRepository.save(videoCategory);
-		return "Success";
+		return new Status("Success");
 	}
 	@PostMapping("/all")
 	public Status addParentVideoCategories(@RequestBody List<VideoCategory> videoCategories) {
@@ -39,9 +52,23 @@ public class VideoCategoryController {
 		return new Status("Success");
 	}
 	@PutMapping("/")
-	public String updateParentVideoCategory(@RequestBody VideoCategory videoCategory) {
+	public Status updateParentVideoCategory(@RequestBody VideoCategory videoCategory) {
 		videoCategoryRepository.save(videoCategory);
-		return "Success";
+		return new Status("Success");
+	}
+	
+	@DeleteMapping("/parent/{categoryId}")
+	@Transactional
+	public Status deleteParentVideoCategory(@PathVariable int categoryId) {
+		videoCategoryRepository.deleteById(categoryId);
+		return new Status("Success");
+	}
+	
+	@DeleteMapping("/child/{categoryId}")
+	@Transactional
+	public Status deleteChildVideoCategory(@PathVariable int categoryId) {
+		childVideoCategoryRepository.deleteById(categoryId);
+		return new Status("Success");
 	}
 
 }

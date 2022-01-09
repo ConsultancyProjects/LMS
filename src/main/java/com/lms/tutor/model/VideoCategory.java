@@ -1,6 +1,7 @@
 package com.lms.tutor.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,5 +40,23 @@ public class VideoCategory implements Serializable {
 		this.categoryName = categoryName;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId, categoryName);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VideoCategory other = (VideoCategory) obj;
+		return  Objects.equals(categoryName, other.categoryName);
+	}
+
+	
     
 }
