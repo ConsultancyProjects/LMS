@@ -48,9 +48,9 @@ public class VideoCategoryController {
 		return new Status("Success");
 	}
 	@DeleteMapping("/")
-	public String addParentVideoCategory(@RequestParam String categoryId) {
+	public Status addParentVideoCategory(@RequestParam String categoryId) {
 		videoCategoryRepository.deleteById(Integer.parseInt(categoryId));
-		return "Success";
+		return new Status("Success");
 	}
 	@PostMapping("/all")
 	public Status addParentVideoCategories(@RequestBody List<VideoCategory> videoCategories) {
