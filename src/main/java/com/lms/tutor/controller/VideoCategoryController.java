@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lms.tutor.model.Status;
 import com.lms.tutor.model.VideoCategory;
 import com.lms.tutor.repository.VideoCategoryRepository;
 
@@ -32,7 +33,11 @@ public class VideoCategoryController {
 		videoCategoryRepository.save(videoCategory);
 		return "Success";
 	}
-	
+	@PostMapping("/all")
+	public Status addParentVideoCategories(@RequestBody List<VideoCategory> videoCategories) {
+		videoCategoryRepository.saveAll(videoCategories);
+		return new Status("Success");
+	}
 	@PutMapping("/")
 	public String updateParentVideoCategory(@RequestBody VideoCategory videoCategory) {
 		videoCategoryRepository.save(videoCategory);
