@@ -17,22 +17,22 @@ import javax.persistence.Table;
 public class Video implements Serializable {
 
 	private static final long serialVersionUID = -142639955667239882L;
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "VIDEO_ID")
-    private int videoId;
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "VIDEO_ID")
+	private int videoId;
+
 	@OneToOne
 	@JoinColumn(name = "CATEGORY_ID")
 	private ChildVideoCategory category;
-	
+
 	@Column(name = "VIDEO_NAME")
 	private String videoName;
-	
+
 	@Column(name = "S3_PATH")
 	private String s3Path;
-	
+
 	@Column(name = "CREATED_DATE")
 	private Timestamp createdDate;
 
@@ -80,6 +80,4 @@ public class Video implements Serializable {
 		this.category = category;
 	}
 
-	
-	
 }

@@ -24,33 +24,33 @@ import com.lms.tutor.service.UserLoginServiceImpl;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-	
+
 	@Autowired
 	private UserLoginServiceImpl userDetailsService;
-	
+
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/")
-	public List<User> getAllUsersForGivenRole(@RequestParam(required=false) Integer roleId) {
+	public List<User> getAllUsersForGivenRole(@RequestParam(required = false) Integer roleId) {
 		List<User> userList = new ArrayList<>();
 		if (roleId == null) {
 			userList = userDetailsService.getAllUsersWithNoRole();
-					
+
 		} else {
 			userList = userDetailsService.getAllUsersWithRoleId(roleId);
 		}
-		userList.stream().forEach(u->u.setPassword(null));
+		userList.stream().forEach(u -> u.setPassword(null));
 		return userList;
 	}
-	
+
 	@GetMapping("/all")
 	public List<User> getAllUsers() {
 		return userDetailsService.findAllUsers();
 	}
-	
+
 	@GetMapping("/{userId}")
 	public User getUserProfile(@PathVariable String userId) {
-		MyUserDetails userDetails = (MyUserDetails)SecurityContextHolder.getContext().
-				getAuthentication().getPrincipal();
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
 		if (userDetails.getAuthorities().contains(Constants.ROLE_STUDENT)
 				&& !userDetails.getUsername().equalsIgnoreCase(userId)) {
 			throw new AccessDeniedException("You are authorized");
@@ -61,11 +61,11 @@ public class UserController {
 		}
 		return userData.get();
 	}
-	
+
 	@DeleteMapping("/{userId}")
 	public Status deleteUser(@PathVariable String userId) {
 		userDetailsService.deleteUser(userId);
 		return new Status("Success");
 	}
-	
+
 }

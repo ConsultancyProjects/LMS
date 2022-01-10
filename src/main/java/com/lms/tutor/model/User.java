@@ -1,6 +1,5 @@
 package com.lms.tutor.model;
 
-
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -15,47 +14,45 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "USER_REGISTRATION")
 public class User implements Serializable {
-	
-    
+
 	private static final long serialVersionUID = -5832767428535043665L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
-    private int id;
-    
-    @Column(name = "USER_ID")
-    private String userId;
-    
-    @Column(name = "PASSWORD")
-    private String password;
-    
-    @Column(name = "EMAIL")
-    private String email;
-    
-    @Column(name = "NAME")
-    private String name;
-    
-    @OneToOne
-    @JoinColumn(name = "ROLE_ID")
-    private Role role;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "ID")
+	private int id;
 
-    public int getId() {
-        return id;
-    }
+	@Column(name = "USER_ID")
+	private String userId;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	@Column(name = "PASSWORD")
+	private String password;
 
+	@Column(name = "EMAIL")
+	private String email;
 
-    public String getPassword() {
-        return password;
-    }
+	@Column(name = "NAME")
+	private String name;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	@OneToOne
+	@JoinColumn(name = "ROLE_ID")
+	private Role role;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getUserId() {
 		return userId;
@@ -89,5 +86,4 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
-    
 }

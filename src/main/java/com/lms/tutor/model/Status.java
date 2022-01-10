@@ -1,9 +1,9 @@
 package com.lms.tutor.model;
 
 public class Status {
-	
+
 	private String response;
-	
+
 	public Status(String response) {
 		super();
 		this.response = response;
@@ -17,5 +17,4 @@ public class Status {
 		this.response = response;
 	}
 
-	
 }

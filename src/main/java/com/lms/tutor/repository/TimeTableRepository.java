@@ -12,5 +12,7 @@ import com.lms.tutor.model.TimeTable;
 public interface TimeTableRepository extends JpaRepository<TimeTable, Integer> {
 
 	List<TimeTable> findAllByFromDate(Timestamp fromDate);
+	
+	List<TimeTable> findByBatchBatchId(int batchId);
 
 }

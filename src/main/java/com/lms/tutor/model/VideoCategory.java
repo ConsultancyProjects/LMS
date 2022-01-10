@@ -15,15 +15,15 @@ import javax.persistence.Table;
 public class VideoCategory implements Serializable {
 
 	private static final long serialVersionUID = -5999461848163702564L;
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "CATEGORY_ID")
-    private int categoryId;
-    
-    @Column(name = "CATEGORY_NAME")
-    private String categoryName;
-    
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "CATEGORY_ID")
+	private int categoryId;
+
+	@Column(name = "CATEGORY_NAME")
+	private String categoryName;
+
 	public int getCategoryId() {
 		return categoryId;
 	}
@@ -54,9 +54,7 @@ public class VideoCategory implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		VideoCategory other = (VideoCategory) obj;
-		return  Objects.equals(categoryName, other.categoryName);
+		return Objects.equals(categoryName, other.categoryName);
 	}
 
-	
-    
 }

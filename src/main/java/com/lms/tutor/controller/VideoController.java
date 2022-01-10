@@ -19,38 +19,38 @@ import com.lms.tutor.util.S3Util;
 @RestController
 @RequestMapping("/videos")
 public class VideoController {
-	
+
 	@Autowired
 	VideoRepository videoRepository;
-	
+
 	@Autowired
 	S3Util s3Util;
-	
+
 	@GetMapping("/{videoId}/metadata/")
 	public Video getVideoMetaData(@PathVariable(value = "videoId") int videoId) {
 		Optional<Video> video = videoRepository.findById(videoId);
-		video.ifPresent(v->v.setS3Path(s3Util.generatePresignedUrl(v.getS3Path())));
+		video.ifPresent(v -> v.setS3Path(s3Util.generatePresignedUrl(v.getS3Path())));
 		return video.get();
 	}
-	
+
 	@GetMapping("/all/metadata/")
 	public List<Video> getAllVideosMetaData() {
 		List<Video> videoData = videoRepository.findAll();
-		videoData.forEach(video->{
-			video.setS3Path(s3Util.generatePresignedUrl(video.getS3Path()));
-		});
-		return videoData;
-	} 
-	
-	@GetMapping("/all/metadata/{categoryId}")
-	public List<Video> findAllVideosThatBelongToParentCategory(@PathVariable(value = "categoryId") Integer categoryId) {
-		List<Video> videoData = videoRepository.findAllVideosThatBelongToParentCategory(categoryId);
-		videoData.forEach(video->{
+		videoData.forEach(video -> {
 			video.setS3Path(s3Util.generatePresignedUrl(video.getS3Path()));
 		});
 		return videoData;
 	}
-	
+
+	@GetMapping("/all/metadata/{categoryId}")
+	public List<Video> findAllVideosThatBelongToParentCategory(@PathVariable(value = "categoryId") Integer categoryId) {
+		List<Video> videoData = videoRepository.findAllVideosThatBelongToParentCategory(categoryId);
+		videoData.forEach(video -> {
+			video.setS3Path(s3Util.generatePresignedUrl(video.getS3Path()));
+		});
+		return videoData;
+	}
+
 	@GetMapping("/metadata/{categoryId}")
 	public Video getVideosMetaThatBelongToChildCategoryId(@PathVariable(value = "categoryId") Integer categoryId) {
 		Video video = videoRepository.findByCategoryChildCategoryId(categoryId);
@@ -59,12 +59,12 @@ public class VideoController {
 		}
 		return video;
 	}
-	
+
 	@PostMapping("/metadata")
 	@PreAuthorize("hasAuthority('ADMIN')")
 	public String addVideoMetaData(@RequestBody Video video) {
 		videoRepository.save(video);
 		return "Success";
 	}
-	
+
 }

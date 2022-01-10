@@ -1,6 +1,5 @@
 package com.lms.tutor.model;
 
-
 import java.io.Serializable;
 
 public class AuthenticationRequest implements Serializable {
@@ -8,32 +7,31 @@ public class AuthenticationRequest implements Serializable {
 	private static final long serialVersionUID = -3626535080483105058L;
 
 	private String username;
-    private String password;
+	private String password;
 
-    public String getUsername() {
-        return username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    //need default constructor for JSON Parsing
-    public AuthenticationRequest()
-    {
+	// need default constructor for JSON Parsing
+	public AuthenticationRequest() {
 
-    }
+	}
 
-    public AuthenticationRequest(String username, String password) {
-        this.setUsername(username);
-        this.setPassword(password);
-    }
+	public AuthenticationRequest(String username, String password) {
+		this.setUsername(username);
+		this.setPassword(password);
+	}
 }

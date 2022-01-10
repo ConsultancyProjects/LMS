@@ -18,17 +18,16 @@ public class ChildVideoCategory implements Serializable {
 	private static final long serialVersionUID = 4146463930919882184L;
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "CHILD_CATEGORY_ID")
-    private int childCategoryId;
-	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "CHILD_CATEGORY_ID")
+	private int childCategoryId;
+
 	@Column(name = "CATEGORY_NAME")
-    private String name;
-	
+	private String name;
+
 	@ManyToOne
 	@JoinColumn(name = "PARENT_CATEGORY_ID")
 	private VideoCategory parentCategory;
-    
 
 	public int getChildCategoryId() {
 		return childCategoryId;
@@ -53,5 +52,5 @@ public class ChildVideoCategory implements Serializable {
 	public void setParentCategory(VideoCategory parentCategory) {
 		this.parentCategory = parentCategory;
 	}
-	
+
 }

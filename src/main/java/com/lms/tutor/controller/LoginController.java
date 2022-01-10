@@ -30,13 +30,12 @@ class LoginController {
 
 	@Autowired
 	private UserLoginServiceImpl userDetailsService;
-	
+
 	@Autowired
-    PasswordEncoder passwordEncoder;
-	
+	PasswordEncoder passwordEncoder;
+
 	@PostMapping(value = "/login")
-	public AuthenticationResponse createAuthenticationToken(
-			@RequestBody AuthenticationRequest authenticationRequest)
+	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

@@ -8,12 +8,12 @@ import com.lms.tutor.repository.VideoRepository;
 
 @Service
 public class VideoServiceImpl {
-	
+
 	@Autowired
 	private VideoRepository videoRepository;
 
 	public void updateVideoMethaData(Video video) {
-		 videoRepository.save(video);
+		videoRepository.save(video);
 	}
 
 }

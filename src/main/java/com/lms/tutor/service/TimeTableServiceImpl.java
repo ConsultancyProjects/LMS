@@ -14,7 +14,7 @@ public class TimeTableServiceImpl {
 
 	@Autowired
 	private TimeTableRepository timeTableRepository;
-	
+
 	public List<TimeTable> getAll() {
 		return timeTableRepository.findAll();
 	}
@@ -25,6 +25,6 @@ public class TimeTableServiceImpl {
 
 	public void saveTimeTable(TimeTable timeTable) {
 		timeTableRepository.save(timeTable);
-		
+
 	}
 }

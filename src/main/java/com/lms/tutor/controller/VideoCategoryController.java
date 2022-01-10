@@ -5,7 +5,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,18 +25,18 @@ import com.lms.tutor.repository.VideoCategoryRepository;
 @RequestMapping("/video-categories")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class VideoCategoryController {
-	
+
 	@Autowired
 	private VideoCategoryRepository videoCategoryRepository;
-	
+
 	@Autowired
 	private ChildVideoCategoryRepository childVideoCategoryRepository;
-	
+
 	@GetMapping("/")
 	public List<VideoCategory> getAllVideoCategories() {
 		return videoCategoryRepository.findAll();
 	}
-	
+
 	@PostMapping("/")
 	public Status addParentVideoCategory(@RequestBody VideoCategory videoCategory) throws Exception {
 		List<VideoCategory> catList = videoCategoryRepository.findAll();
@@ -47,29 +46,32 @@ public class VideoCategoryController {
 		videoCategoryRepository.save(videoCategory);
 		return new Status("Success");
 	}
+
 	@DeleteMapping("/")
 	public Status addParentVideoCategory(@RequestParam String categoryId) {
 		videoCategoryRepository.deleteById(Integer.parseInt(categoryId));
 		return new Status("Success");
 	}
+
 	@PostMapping("/all")
 	public Status addParentVideoCategories(@RequestBody List<VideoCategory> videoCategories) {
 		videoCategoryRepository.saveAll(videoCategories);
 		return new Status("Success");
 	}
+
 	@PutMapping("/")
 	public Status updateParentVideoCategory(@RequestBody VideoCategory videoCategory) {
 		videoCategoryRepository.save(videoCategory);
 		return new Status("Success");
 	}
-	
+
 	@DeleteMapping("/parent/{categoryId}")
 	@Transactional
 	public Status deleteParentVideoCategory(@PathVariable int categoryId) {
 		videoCategoryRepository.deleteById(categoryId);
 		return new Status("Success");
 	}
-	
+
 	@DeleteMapping("/child/{categoryId}")
 	@Transactional
 	public Status deleteChildVideoCategory(@PathVariable int categoryId) {

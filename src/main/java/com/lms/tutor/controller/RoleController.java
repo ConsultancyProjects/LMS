@@ -19,15 +19,15 @@ import com.lms.tutor.service.RoleServiceImpl;
 @PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/roles")
 public class RoleController {
-	
+
 	@Autowired
 	private RoleServiceImpl roleServiceImpl;
-	
+
 	@GetMapping("/")
 	public List<Role> getAllRoles() {
 		return roleServiceImpl.getAllRoles();
 	}
-	
+
 	@PutMapping("/{roleId}")
 	public Status updateRole(@RequestParam String userName, @PathVariable int roleId) {
 		roleServiceImpl.updateRoleOfUser(roleId, userName);

@@ -19,30 +19,30 @@ import com.lms.tutor.repository.ChildVideoCategoryRepository;
 @RequestMapping("/child-video-categories")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class ChildVideoCategoryController {
-	
+
 	@Autowired
 	private ChildVideoCategoryRepository childVideoCategoryRepository;
-	
+
 	@GetMapping("/")
 	public List<ChildVideoCategory> getAllChildVideoCategories() {
 		return childVideoCategoryRepository.findAll();
 	}
-	
+
 	@GetMapping("/{parentCategoryId}")
 	public List<ChildVideoCategory> getAllVideoCategoriesByParentCatId(@PathVariable int parentCategoryId) {
 		return childVideoCategoryRepository.findAllByParentCategoryCategoryId(parentCategoryId);
 	}
-	
+
 	@PostMapping("/")
-	public String addChildVideoCategory(@RequestBody ChildVideoCategory videoCategory) {
+	public ChildVideoCategory addChildVideoCategory(@RequestBody ChildVideoCategory videoCategory) {
 		childVideoCategoryRepository.save(videoCategory);
-		return "Success";
+		return videoCategory;
 	}
-	
+
 	@PutMapping("/")
-	public String updateChildVideoCategory(@RequestBody ChildVideoCategory videoCategory) {
+	public ChildVideoCategory updateChildVideoCategory(@RequestBody ChildVideoCategory videoCategory) {
 		childVideoCategoryRepository.save(videoCategory);
-		return "Success";
+		return videoCategory;
 	}
 
 }

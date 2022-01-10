@@ -27,7 +27,7 @@ public class UserLoginServiceImpl implements UserDetailsService {
 		user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + userName));
 		return user.map(MyUserDetails::new).get();
 	}
-	
+
 	public List<User> findAllUsers() {
 		return (List<User>) userRepository.findAll();
 	}
@@ -35,7 +35,7 @@ public class UserLoginServiceImpl implements UserDetailsService {
 	public Optional<User> findUserByUserId(String userName) {
 		return userRepository.findByUserId(userName);
 	}
-	
+
 	@Transactional
 	public void deleteUser(String userId) {
 		userRepository.deleteUserByUserId(userId);
@@ -70,6 +70,5 @@ public class UserLoginServiceImpl implements UserDetailsService {
 	public List<User> filterUserByEmail(String emailId) {
 		return userRepository.findByEmailStartsWith(emailId);
 	}
-	
 
 }
