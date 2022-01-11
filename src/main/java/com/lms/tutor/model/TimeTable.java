@@ -27,7 +27,7 @@ public class TimeTable implements Serializable {
 
 	@JoinColumn(name = "VIDEO_ID")
 	@OneToOne
-	private Video videoId;
+	private Video video;
 
 	@JoinColumn(name = "TUTOR_ID", referencedColumnName = "USER_ID")
 	@OneToOne
@@ -53,12 +53,12 @@ public class TimeTable implements Serializable {
 		this.scheduleId = scheduleId;
 	}
 
-	public Video getVideoId() {
-		return videoId;
+	public Video getVideo() {
+		return video;
 	}
 
-	public void setVideoId(Video videoId) {
-		this.videoId = videoId;
+	public void setVideoId(Video video) {
+		this.video = video;
 	}
 
 	public User getTutorId() {

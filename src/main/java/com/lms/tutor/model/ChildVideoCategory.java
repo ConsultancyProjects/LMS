@@ -20,7 +20,7 @@ public class ChildVideoCategory implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "CHILD_CATEGORY_ID")
-	private int childCategoryId;
+	private Integer childCategoryId;
 
 	@Column(name = "CATEGORY_NAME")
 	private String name;
@@ -29,11 +29,11 @@ public class ChildVideoCategory implements Serializable {
 	@JoinColumn(name = "PARENT_CATEGORY_ID")
 	private VideoCategory parentCategory;
 
-	public int getChildCategoryId() {
+	public Integer getChildCategoryId() {
 		return childCategoryId;
 	}
 
-	public void setChildCategoryId(int childCategoryId) {
+	public void setChildCategoryId(Integer childCategoryId) {
 		this.childCategoryId = childCategoryId;
 	}
 

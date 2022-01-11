@@ -30,19 +30,22 @@ public class TimeTableController {
 		return timeTableServiceImpl.getAllScheduledCourses(new Timestamp(fromDate));
 	}
 	
+	
 	@PostMapping("/")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String addTimeTable(@RequestBody TimeTable timeTable) {
+	public TimeTable addTimeTable(@RequestBody TimeTable timeTable) {
 		timeTableServiceImpl.saveTimeTable(timeTable);
-		return "Success";
+		return timeTable;
 	}
 	
 	@PutMapping("/")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public String updateTimeTable(@RequestBody TimeTable timeTable) {
+	public TimeTable updateTimeTable(@RequestBody TimeTable timeTable) {
 		timeTableServiceImpl.saveTimeTable(timeTable);
-		return "Success";
+		return timeTable;
 	}
+	
+	
 	
 
 }

@@ -35,6 +35,9 @@ public class Video implements Serializable {
 
 	@Column(name = "CREATED_DATE")
 	private Timestamp createdDate;
+	
+	@Column(name = "MINUTES")
+	private int minutes;
 
 	public int getVideoId() {
 		return videoId;
@@ -80,4 +83,12 @@ public class Video implements Serializable {
 		this.category = category;
 	}
 
+	public int getMinutes() {
+		return minutes;
+	}
+
+	public void setMinutes(int minutes) {
+		this.minutes = minutes;
+	}
+	
 }
