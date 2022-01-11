@@ -19,5 +19,8 @@ public interface TimeTableRepository extends JpaRepository<TimeTable, Integer> {
 	
 	@Query(value = "SELECT * FROM lms.time_table where TO_DATE <= sysdate() and batch_id=:batchId", nativeQuery=true)
 	List<TimeTable> findAllHistoryDataForBatch(@Param("batchId") int batchId);
+	
+	 @Query(value = "SELECT * FROM lms.time_table where BATCH_ID in (:batchId)", nativeQuery=true)
+	 List<TimeTable> getTimeTableForUser(@Param("batchId")List<Integer> batchId);
 
 }
