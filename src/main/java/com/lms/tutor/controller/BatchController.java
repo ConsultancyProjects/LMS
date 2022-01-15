@@ -47,6 +47,11 @@ public class BatchController {
 		return userBatchMappingRepository.findByUserId(userId).stream().map(bm -> bm.getBatch())
 				.collect(Collectors.toList());
 	}
+	
+	@GetMapping("/child-vid-cat/{childVidCatId}")
+	public List<Batch> getAllBatchesForChildCatgeory(@PathVariable Integer childVidCatId) {
+		return batchRepository.findByChildVideoCategoryId(childVidCatId);
+	}
 
 	@PostMapping("/")
 	public Status addBatch(@RequestBody Batch batch) throws Exception {

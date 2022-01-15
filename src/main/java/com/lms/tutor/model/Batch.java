@@ -26,6 +26,9 @@ public class Batch implements Serializable {
 
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	@Column(name = "CHILD_VIDEO_CATEGORY_ID")
+	private Integer childVideoCategoryId;
 
 	public int getBatchId() {
 		return batchId;
@@ -49,6 +52,14 @@ public class Batch implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public Integer getChildVideoCategoryId() {
+		return childVideoCategoryId;
+	}
+
+	public void setChildVideoCategoryId(Integer childVideoCategoryId) {
+		this.childVideoCategoryId = childVideoCategoryId;
 	}
 
 	@Override
