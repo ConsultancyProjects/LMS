@@ -54,6 +54,7 @@ public class BatchController {
 	}
 
 	@PostMapping("/")
+	@Transactional
 	public Status addBatch(@RequestBody Batch batch) throws Exception {
 		List<Batch> batList = batchRepository.findAll();
 		if (batList.contains(batch)) {
@@ -79,6 +80,7 @@ public class BatchController {
 	}
 
 	@PutMapping("/{batchId}")
+	@Transactional
 	public Status updateBatch(@RequestBody Batch batch) {
 		batchRepository.save(batch);
 		return new Status("Success");
