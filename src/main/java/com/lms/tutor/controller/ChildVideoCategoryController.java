@@ -38,7 +38,11 @@ public class ChildVideoCategoryController {
 		childVideoCategoryRepository.save(videoCategory);
 		return videoCategory;
 	}
-
+	@PostMapping("/all")
+	public List<ChildVideoCategory> addAllChildVideoCategory(@RequestBody List<ChildVideoCategory> videoCategories) {
+		videoCategories = childVideoCategoryRepository.saveAll(videoCategories);
+		return videoCategories;
+	}
 	@PutMapping("/")
 	public ChildVideoCategory updateChildVideoCategory(@RequestBody ChildVideoCategory videoCategory) {
 		childVideoCategoryRepository.save(videoCategory);
