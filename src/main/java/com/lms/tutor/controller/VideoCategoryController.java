@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lms.tutor.model.ChildVideoCategory;
 import com.lms.tutor.model.Status;
 import com.lms.tutor.model.VideoCategory;
 import com.lms.tutor.repository.ChildVideoCategoryRepository;
@@ -67,8 +69,14 @@ public class VideoCategoryController {
 
 	@DeleteMapping("/parent/{categoryId}")
 	@Transactional
-	public Status deleteParentVideoCategory(@PathVariable int categoryId) {
-		videoCategoryRepository.deleteById(categoryId);
+	public Status deleteParentVideoCategory(@PathVariable int categoryId) throws Exception {
+		List<ChildVideoCategory> catList = childVideoCategoryRepository.
+				findAllByParentCategoryCategoryId(categoryId);
+		if (CollectionUtils.isEmpty(catList)) {
+			videoCategoryRepository.deleteById(categoryId);
+		} else {
+			throw new Exception("You can't delete if theres a child category associated with it");
+		}
 		return new Status("Success");
 	}
 
