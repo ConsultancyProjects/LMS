@@ -34,6 +34,11 @@ public class UserBatchMappingController {
 	public List<UserBatchMapping> getAllBatchMappingsForUsers(@PathVariable String userId) {
 		return userBatchMappingRepository.findByUserId(userId);
 	}
+	
+	@GetMapping("/{batchId}")
+	public List<UserBatchMapping> getAllBatchMappingsForUsers(@PathVariable int batchId) {
+		return userBatchMappingRepository.findByBatchBatchId(batchId);
+	}
 
 	@PostMapping("/{userId}/batch/{batchId}")
 	@Transactional
@@ -56,7 +61,7 @@ public class UserBatchMappingController {
 	}
 
 	@DeleteMapping("/{userId}/batch/{batchId}")
-	public Status deleteUserCatMapping(@PathVariable String userId, @PathVariable int batchId) {
+	public Status deleteUserBatchMapping(@PathVariable String userId, @PathVariable int batchId) {
 		userBatchMappingRepository.deleteEntryForGivenUserAndBatchId(userId, batchId);
 		return new Status("Success");
 	}
