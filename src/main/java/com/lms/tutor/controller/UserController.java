@@ -3,7 +3,9 @@ package com.lms.tutor.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,9 +18,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lms.tutor.constants.Constants;
+import com.lms.tutor.model.Batch;
+import com.lms.tutor.model.ChildVideoCategory;
 import com.lms.tutor.model.MyUserDetails;
 import com.lms.tutor.model.Status;
 import com.lms.tutor.model.User;
+import com.lms.tutor.model.UserBatchMapping;
+import com.lms.tutor.model.UserVideoCategoryMapping;
+import com.lms.tutor.repository.UserBatchMappingRepository;
+import com.lms.tutor.repository.UserVideoCategoryMappingRepository;
 import com.lms.tutor.service.UserLoginServiceImpl;
 
 @RestController
@@ -27,7 +35,14 @@ public class UserController {
 
 	@Autowired
 	private UserLoginServiceImpl userDetailsService;
+	
+	@Autowired
+	private UserVideoCategoryMappingRepository userVideoCategoryMappingRepository;
+	
+	@Autowired
+	private UserBatchMappingRepository userBatchMappingRepository;
 
+	
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/")
 	public List<User> getAllUsersForGivenRole(@RequestParam(required = false) Integer roleId) {
@@ -38,13 +53,23 @@ public class UserController {
 		} else {
 			userList = userDetailsService.getAllUsersWithRoleId(roleId);
 		}
-		userList.stream().forEach(u -> u.setPassword(null));
+		userList.stream().forEach(u ->{
+			u.setPassword(null);
+			u.setCategories(getAllCatgeoriesForUser(u.getUserId()));
+			u.setBatches(getAllBatchMappingsForUsers(u.getUserId()));
+		});
 		return userList;
 	}
 
 	@GetMapping("/all")
 	public List<User> getAllUsers() {
-		return userDetailsService.findAllUsers();
+		List<User> userList = new ArrayList<>();
+		userList.stream().forEach(u ->{
+			u.setPassword(null);
+			u.setCategories(getAllCatgeoriesForUser(u.getUserId()));
+			u.setBatches(getAllBatchMappingsForUsers(u.getUserId()));
+		});
+		return userList;
 	}
 
 	@GetMapping("/{userId}")
@@ -58,6 +83,8 @@ public class UserController {
 		Optional<User> userData = userDetailsService.findUserByUserId(userId);
 		if (userData.isPresent()) {
 			userData.get().setPassword(null);
+			userData.get().setCategories(getAllCatgeoriesForUser(userId));
+			userData.get().setBatches(getAllBatchMappingsForUsers(userId));
 		}
 		return userData.get();
 	}
@@ -67,5 +94,27 @@ public class UserController {
 		userDetailsService.deleteUser(userId);
 		return new Status("Success");
 	}
+	
+	private List<ChildVideoCategory> getAllCatgeoriesForUser( String userId) {
+		List<UserVideoCategoryMapping> mapList = 
+				userVideoCategoryMappingRepository.findByUserUserId(userId);
+		List<ChildVideoCategory> catList = new ArrayList<>();
+		if (!CollectionUtils.isEmpty(mapList)) {
+			catList = mapList.stream().map(mp->mp.getChildVideoCategory()).collect(Collectors.toList());
+		}
+		 return catList;
+	}
 
+	private List<Batch> getAllBatchMappingsForUsers(@PathVariable String userId) {
+		List<UserBatchMapping> mapList = 
+				userBatchMappingRepository.findByUserId(userId);
+		List<Batch> catList = new ArrayList<>();
+		if (!CollectionUtils.isEmpty(mapList)) {
+			catList = mapList.stream().map(mp->mp.getBatch()).collect(Collectors.toList());
+		}
+		 return catList;
+	}
+	
+	
+	
 }

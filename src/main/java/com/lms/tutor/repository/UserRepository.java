@@ -25,6 +25,10 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	@Modifying
 	void deleteUsersInVideoCategory(@Param("userId") String userId);
 	
+	@Query(value="delete from lms.USER_BATCH_MAPPING b where b.user_id=:userId", nativeQuery=true)
+	@Modifying
+	void deleteUsersInBatch(@Param("userId") String userId);
+	
 	@Query(value = "select * from lms.user_registration  where role_id is null", nativeQuery=true)
 	List<User> findAllUsersWithNoRole();
 	

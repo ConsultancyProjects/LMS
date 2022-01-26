@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -27,7 +28,7 @@ public class UserVideoCategoryMapping implements Serializable {
 	@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
 	User user;
 
-	@OneToOne(cascade = CascadeType.MERGE)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "CHILD_VIDEO_CATEGORY_ID")
 	ChildVideoCategory childVideoCategory;
 

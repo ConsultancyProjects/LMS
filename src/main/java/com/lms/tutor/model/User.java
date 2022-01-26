@@ -1,6 +1,8 @@
 package com.lms.tutor.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "USER_REGISTRATION")
@@ -37,6 +40,21 @@ public class User implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "ROLE_ID")
 	private Role role;
+	
+	/*@OneToMany(cascade = CascadeType.MERGE)
+	@JoinColumn(name="USER_ID",referencedColumnName = "USER_ID")
+	List<UserBatchMapping> batches;*/
+	
+	@Transient
+	List<Batch> batches;
+	
+	@Transient
+	List<ChildVideoCategory> categories;
+	
+
+	@Column(name = "UPDATE_DATE")
+	// @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+	private Timestamp updateDate;
 
 	public int getId() {
 		return id;
@@ -85,5 +103,32 @@ public class User implements Serializable {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+
+	public List<Batch> getBatches() {
+		return batches;
+	}
+
+	public void setBatches(List<Batch> batches) {
+		this.batches = batches;
+	} 
+
+	public List<ChildVideoCategory> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<ChildVideoCategory> categories) {
+		this.categories = categories;
+	}
+
+	public Timestamp getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Timestamp updateDate) {
+		this.updateDate = updateDate;
+	}
+	
+	
+	
 
 }

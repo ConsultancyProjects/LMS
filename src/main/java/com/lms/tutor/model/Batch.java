@@ -29,7 +29,7 @@ public class Batch implements Serializable {
 	
 	@Column(name = "CHILD_VIDEO_CATEGORY_ID")
 	private Integer childVideoCategoryId;
-
+	
 	public int getBatchId() {
 		return batchId;
 	}
