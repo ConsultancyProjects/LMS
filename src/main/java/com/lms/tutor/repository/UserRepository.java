@@ -32,5 +32,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	@Query(value = "select * from lms.user_registration  where role_id is null", nativeQuery=true)
 	List<User> findAllUsersWithNoRole();
 	
+	@Query(value = "SELECT * FROM lms.user_registration where UPDATE_DATE  < DATE_SUB(NOW(), INTERVAL 30 DAY)", nativeQuery=true)
+	List<User> getAllUsersWhosePasswordsAreUpdatedLongBack();
+	
 	List<User> findByEmailStartsWith(String emailId);
 }

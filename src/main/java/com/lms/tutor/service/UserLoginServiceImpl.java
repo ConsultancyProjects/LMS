@@ -1,5 +1,7 @@
 package com.lms.tutor.service;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,9 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.lms.tutor.model.MyUserDetails;
 import com.lms.tutor.model.Status;
@@ -23,6 +24,7 @@ import com.lms.tutor.repository.ChildVideoCategoryRepository;
 import com.lms.tutor.repository.UserBatchMappingRepository;
 import com.lms.tutor.repository.UserRepository;
 import com.lms.tutor.repository.UserVideoCategoryMappingRepository;
+import com.lms.tutor.util.AmazonSesClient;
 
 @Service
 public class UserLoginServiceImpl implements UserDetailsService {
@@ -41,6 +43,12 @@ public class UserLoginServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private ChildVideoCategoryRepository childVideoCategoryRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	AmazonSesClient amazonSesClient;
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -67,16 +75,21 @@ public class UserLoginServiceImpl implements UserDetailsService {
 	}
 
 	public void registerUser(User user) throws Exception {
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		if (userRepository.findByUserId(user.getUserId()).isPresent()) {
 			throw new Exception("UserId already exists");
 		}
 		userRepository.save(user);
 	}
 	
+	@Transactional
 	public void addUser(User user) throws Exception {
 		if (userRepository.findByUserId(user.getUserId()).isPresent()) {
 			throw new Exception("UserId already exists");
 		}
+		String tempPwd = user.getUserId()+"@$"+user.getEmail().hashCode()+"@";
+		user.setPassword(passwordEncoder.encode(tempPwd));
+		
 		userRepository.save(user);
 		user.getBatches().forEach(batch->{
 			addUserBatchCategoryMapping(user.getUserId(), batch.getBatchId());
@@ -84,6 +97,7 @@ public class UserLoginServiceImpl implements UserDetailsService {
 		user.getCategories().forEach(cat->{
 			addUserVideoCategoryMapping(user.getUserId(), cat.getChildCategoryId());
 		});
+		amazonSesClient.sendEmailForTempPassword(tempPwd, user.getUserId(), user.getName(), user.getEmail());
 	}
 	
 	@Transactional

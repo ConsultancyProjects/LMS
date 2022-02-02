@@ -36,6 +36,9 @@ public class User implements Serializable {
 
 	@Column(name = "NAME")
 	private String name;
+	
+	@Column(name = "PHONE_NUMBER")
+	private String phoneNumber;
 
 	@OneToOne
 	@JoinColumn(name = "ROLE_ID")
@@ -127,8 +130,14 @@ public class User implements Serializable {
 	public void setUpdateDate(Timestamp updateDate) {
 		this.updateDate = updateDate;
 	}
-	
-	
-	
 
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	
+	
 }

@@ -8,7 +8,7 @@ public class ContactUs implements Serializable {
 
 	private String fromEmailId;
 
-	private String toEmailId;
+	private String userName;
 
 	private String description;
 
@@ -20,12 +20,12 @@ public class ContactUs implements Serializable {
 		this.fromEmailId = fromEmailId;
 	}
 
-	public String getToEmailId() {
-		return toEmailId;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setToEmailId(String toEmailId) {
-		this.toEmailId = toEmailId;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getDescription() {

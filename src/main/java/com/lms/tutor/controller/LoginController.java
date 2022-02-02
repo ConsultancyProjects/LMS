@@ -13,6 +13,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ import com.lms.tutor.model.ResetPassword;
 import com.lms.tutor.model.Status;
 import com.lms.tutor.model.User;
 import com.lms.tutor.service.UserLoginServiceImpl;
+import com.lms.tutor.util.AmazonSesClient;
 import com.lms.tutor.util.JwtUtil;
 
 @RestController
@@ -40,7 +42,10 @@ class LoginController {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
+	
+	@Autowired
+	AmazonSesClient amazonSesClient;
+	
 	@PostMapping(value = "/login")
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws Exception {
@@ -59,7 +64,6 @@ class LoginController {
 
 	@PostMapping(value = "/register")
 	public Status registerUser(@RequestBody User user) throws Exception {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		this.userDetailsService.registerUser(user);
 		return new Status("Success");
 	}
@@ -85,6 +89,19 @@ class LoginController {
 			throw new Exception("Old and new Password dont match");
 		}
 		
+		return new Status("Success");
+	}
+	
+	@PutMapping(value = "/forgotpassword/{userName}")
+	@Transactional
+	public Status forgotPassword(@PathVariable String userName) throws Exception {
+		User user = this.userDetailsService.findUserByUserId(userName).get();
+		
+		String tempPwd = user.getUserId()+"@$"+user.getEmail().hashCode()+"@";
+		user.setPassword(passwordEncoder.encode(tempPwd));
+		this.userDetailsService.updateUser(user);
+		
+		amazonSesClient.sendEmailForTempPassword(tempPwd, user.getUserId(), user.getName(), user.getEmail());
 		return new Status("Success");
 	}
 }
