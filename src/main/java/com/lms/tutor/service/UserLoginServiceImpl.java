@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.simpleemail.model.VerifyEmailAddressRequest;
 import com.lms.tutor.model.MyUserDetails;
 import com.lms.tutor.model.Status;
 import com.lms.tutor.model.User;
@@ -84,12 +85,15 @@ public class UserLoginServiceImpl implements UserDetailsService {
 	
 	@Transactional
 	public void addUser(User user) throws Exception {
-		if (userRepository.findByUserId(user.getUserId()).isPresent()) {
-			throw new Exception("UserId already exists");
+		if (userRepository.findByUserId(user.getUserId()).isPresent() || 
+				userRepository.findByEmail(user.getEmail()).isPresent()) {
+			throw new Exception("User already exists with same userId or email");
 		}
 		String tempPwd = user.getUserId()+"@$"+user.getEmail().hashCode()+"@";
 		user.setPassword(passwordEncoder.encode(tempPwd));
-		
+		Timestamp currentDate = new Timestamp((new Date()).getTime());
+		user.setUpdateDate(currentDate);
+		user.setCreateDate(currentDate);
 		userRepository.save(user);
 		user.getBatches().forEach(batch->{
 			addUserBatchCategoryMapping(user.getUserId(), batch.getBatchId());
@@ -97,7 +101,8 @@ public class UserLoginServiceImpl implements UserDetailsService {
 		user.getCategories().forEach(cat->{
 			addUserVideoCategoryMapping(user.getUserId(), cat.getChildCategoryId());
 		});
-		amazonSesClient.sendEmailForTempPassword(tempPwd, user.getUserId(), user.getName(), user.getEmail());
+		amazonSesClient.getAmazonSimpleEmailService().
+		verifyEmailAddress(new VerifyEmailAddressRequest().withEmailAddress(user.getEmail()));
 	}
 	
 	@Transactional

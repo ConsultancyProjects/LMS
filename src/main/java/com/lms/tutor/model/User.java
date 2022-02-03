@@ -56,8 +56,10 @@ public class User implements Serializable {
 	
 
 	@Column(name = "UPDATE_DATE")
-	// @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
 	private Timestamp updateDate;
+	
+	@Column(name = "CREATE_DATE")
+	private Timestamp createDate;
 
 	public int getId() {
 		return id;
@@ -137,6 +139,14 @@ public class User implements Serializable {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public Timestamp getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Timestamp createDate) {
+		this.createDate = createDate;
 	}
 	
 	

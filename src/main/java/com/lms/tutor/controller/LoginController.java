@@ -49,7 +49,7 @@ class LoginController {
 	@PostMapping(value = "/login")
 	public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
 			throws Exception {
-		try {
+	try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 		} catch (BadCredentialsException e) {

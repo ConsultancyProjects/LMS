@@ -1,5 +1,9 @@
 package com.lms.tutor.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -9,6 +13,8 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.simpleemail.model.Body;
 import com.amazonaws.services.simpleemail.model.Content;
 import com.amazonaws.services.simpleemail.model.Destination;
+import com.amazonaws.services.simpleemail.model.ListIdentitiesResult;
+import com.amazonaws.services.simpleemail.model.ListVerifiedEmailAddressesResult;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 import com.amazonaws.services.simpleemail.model.SendEmailResult;
@@ -32,10 +38,22 @@ public class AmazonSesClient {
 
 	}
 
+	public List<String> getUnverifiedEmailList() {
+		List<String> allEmailList = getAmazonSimpleEmailService().listIdentities().getIdentities();
+		List<String> verifiedEmailList = getAmazonSimpleEmailService().listVerifiedEmailAddresses().getVerifiedEmailAddresses();
+		List<String> resultList = new ArrayList<>();
+		if (verifiedEmailList.size() != allEmailList.size()) {
+			allEmailList.forEach(email->{
+				if (!verifiedEmailList.contains(email)) {
+					resultList.add(email);
+				}
+			});
+		}
+		return resultList;
+	}
  
 	public void sendEmailForTempPassword(String tempPwd, String userName, 
 			String name, String receiverEmail) throws Exception {
-	
 	  String emailContent =
 	      "<!DOCTYPE html>\n"
 	          + "<html>\n"
