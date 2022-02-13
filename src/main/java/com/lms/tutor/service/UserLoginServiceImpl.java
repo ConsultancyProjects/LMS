@@ -95,12 +95,16 @@ public class UserLoginServiceImpl implements UserDetailsService {
 		user.setUpdateDate(currentDate);
 		user.setCreateDate(currentDate);
 		userRepository.save(user);
-		user.getBatches().forEach(batch->{
-			addUserBatchCategoryMapping(user.getUserId(), batch.getBatchId());
-		});
-		user.getCategories().forEach(cat->{
-			addUserVideoCategoryMapping(user.getUserId(), cat.getChildCategoryId());
-		});
+		if (user.getBatches() != null && user.getBatches().size > 0) {
+			user.getBatches().forEach(batch->{
+				addUserBatchCategoryMapping(user.getUserId(), batch.getBatchId());
+			});
+		}
+		if (user.getCategories() != null && user.getCategories().size > 0) {
+			user.getCategories().forEach(cat->{
+				addUserVideoCategoryMapping(user.getUserId(), cat.getChildCategoryId());
+			});
+		}
 		amazonSesClient.getAmazonSimpleEmailService().
 		verifyEmailAddress(new VerifyEmailAddressRequest().withEmailAddress(user.getEmail()));
 	}
