@@ -38,7 +38,7 @@ public class Scheduler {
 	// runs every 5min
 	@Scheduled(fixedDelay = 1000 * 60 * 5)
 	public void scheduleToSendTempPwdMailTask() {
-		List<String> emailList = amazonSesClient.getUnverifiedEmailList();
+		List<String> emailList = amazonSesClient.getVerifiedEmailList();
 		if (emailList.size() > 0) {
 			List<User> userList = userRepository.getCreatedUsersWhosePwdIsNotSet();
 			userList.stream().filter(user -> emailList.contains(user.getEmail())).forEach(user -> {
