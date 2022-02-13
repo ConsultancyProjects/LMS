@@ -169,4 +169,8 @@ public class AmazonSesClient {
 			  }
 		
 	}
+	
+	public List<String> getVerifiedEmailList() {
+		return getAmazonSimpleEmailService().listVerifiedEmailAddresses().getVerifiedEmailAddresses();
+	}
 }
