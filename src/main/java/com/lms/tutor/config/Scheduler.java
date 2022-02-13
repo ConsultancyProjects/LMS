@@ -20,6 +20,8 @@ public class Scheduler {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	private static List<String> emailSentList = new ArrayList<String>();
 
 
 	// runs every day
@@ -44,8 +46,11 @@ public class Scheduler {
 			userList.stream().filter(user -> emailList.contains(user.getEmail())).forEach(user -> {
 				String tempPwd = user.getUserId() + "@$" + user.getEmail().hashCode() + "@";
 				try {
-					amazonSesClient.sendEmailForTempPassword(tempPwd, user.getUserId(), user.getName(),
+					if (!Scheduler.emailSentList.contains(user.getEmail())) {
+						amazonSesClient.sendEmailForTempPassword(tempPwd, user.getUserId(), user.getName(),
 							user.getEmail());
+						emailSentList.add(user.getEmail());
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
