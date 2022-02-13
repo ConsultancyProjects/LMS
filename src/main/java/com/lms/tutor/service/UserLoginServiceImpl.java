@@ -95,12 +95,12 @@ public class UserLoginServiceImpl implements UserDetailsService {
 		user.setUpdateDate(currentDate);
 		user.setCreateDate(currentDate);
 		userRepository.save(user);
-		if (user.getBatches() != null && user.getBatches().size > 0) {
+		if (user.getBatches() != null && user.getBatches().size() > 0) {
 			user.getBatches().forEach(batch->{
 				addUserBatchCategoryMapping(user.getUserId(), batch.getBatchId());
 			});
 		}
-		if (user.getCategories() != null && user.getCategories().size > 0) {
+		if (user.getCategories() != null && user.getCategories().size() > 0) {
 			user.getCategories().forEach(cat->{
 				addUserVideoCategoryMapping(user.getUserId(), cat.getChildCategoryId());
 			});
